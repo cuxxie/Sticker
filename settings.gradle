@@ -1,0 +1,2 @@
+include ':app',':stickerviewLib'
+project(':stickerviewLib').projectDir = new File('libs/stickerviewLib')

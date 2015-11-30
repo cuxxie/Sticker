@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ImageSticker</string>
+    <string name="action_done">Done</string>
+    <string name="action_setting">Setting</string>
+</resources>

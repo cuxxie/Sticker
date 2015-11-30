@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#000"
+    tools:context=".MainActivity">
+
+    <!--   android:paddingLeft="@dimen/activity_horizontal_margin"
+   android:paddingRight="@dimen/activity_horizontal_margin"
+   android:paddingTop="@dimen/activity_vertical_margin"
+   android:paddingBottom="@dimen/activity_vertical_margin" -->
+
+
+    <ooo.oxo.library.widget.TouchImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- <ImageView
+        android:id="@+id/iv_photo"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+-->
+    <!-- <com.hendr.imagesticker.ZoomableDraweeView
+         android:id="@+id/zoomable"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"/>
+
+     <com.facebook.drawee.view.SimpleDraweeView
+         android:id="@+id/my_image_view"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         fresco:fadeDuration="300"
+         fresco:actualImageScaleType="focusCrop"
+         fresco:placeholderImageScaleType="fitCenter"
+         fresco:failureImageScaleType="centerInside"
+         fresco:retryImageScaleType="centerCrop"
+         fresco:progressBarImageScaleType="centerInside"
+         fresco:progressBarAutoRotateInterval="1000"
+         fresco:roundAsCircle="false"
+         fresco:roundedCornerRadius="1dp"
+         fresco:roundTopLeft="true"
+         fresco:roundTopRight="false"
+         fresco:roundBottomLeft="false"
+         fresco:roundBottomRight="true"
+         fresco:roundingBorderWidth="2dp"
+         /> -->
+
+</RelativeLayout>
