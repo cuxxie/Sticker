@@ -7,12 +7,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -24,19 +20,10 @@ import android.widget.RelativeLayout;
 
 import me.isming.sticker.library.StickerView;
 import ooo.oxo.library.widget.TouchImageView;
-import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
-import com.hendr.imagesticker.*;
-
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.io.IOException;
-import java.util.concurrent.Semaphore;
-
-import static android.graphics.Bitmap.Config.ARGB_8888;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -66,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
        // Picasso.with(this).load("http://dummyimage.com/1080x1533/FFF/000.jpg&text=asu").into(imageView);
        // Picasso.with(this).load("http://dummyimage.com/2160x3066/FFF/000.jpg&text=asu").into(imageView);
         //
-        // Picasso.with(this).load("http://2.bp.blogspot.com/-EMHgM-hI58k/Vi5GtyudrLI/AAAAAAAAMXA/0ZfJUgZGO6M/s1600/2015-10-26%2B11.22.57.jpg").into(imageView);
+         Picasso.with(this).load("http://2.bp.blogspot.com/-EMHgM-hI58k/Vi5GtyudrLI/AAAAAAAAMXA/0ZfJUgZGO6M/s1600/2015-10-26%2B11.22.57.jpg").into(imageView);
 
-         Picasso.with(this).load("http://www.dhresource.com/albu_280449507_00/1.0x0.jpg").into(imageView);
+        // Picasso.with(this).load("http://www.dhresource.com/albu_280449507_00/1.0x0.jpg").into(imageView);
 
 
-        addSticker();
+       // addSticker();
 
 
       /*  mImageView = (ImageView) findViewById(R.id.iv_photo);
@@ -111,128 +98,68 @@ public class MainActivity extends AppCompatActivity {
 
     private void doneAddSticker()
     {
-        Bitmap img = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-        Bitmap bmOverlay = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Bitmap.Config.ARGB_8888);
-        Bitmap bmp = stickerView.getBitmap();
-        Matrix stickerMatrix = stickerView.getmMatrix();
-        Canvas canvas = new Canvas(bmOverlay);
-        Matrix myMatrix = new Matrix();
+        float valueImage[] = new float[10];
+        float valueDestination[] = new float[10];
+        float valueSticker[] = new float[10];
 
-        Rect smallImgRect = new Rect();
+        Bitmap sourceImage = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+        Bitmap bitmapOverlay = Bitmap.createBitmap(sourceImage.getWidth(), sourceImage.getHeight(), Bitmap.Config.ARGB_8888);
+      //  Bitmap stickerBitmap = stickerView.getBitmap();
 
-        Rect imgRect = new Rect();
-        imageView.getDrawingRect(imgRect);
-        imgRect.set(0, 0, img.getWidth(), img.getHeight());
+        Canvas canvas = new Canvas(bitmapOverlay);
+
+        Matrix stickerSourceMatrix = stickerView.getmMatrix();
+        Matrix overlayMatrix = new Matrix();
+        Matrix imageMatrix = imageView.getImageMatrix();
+        Matrix stickerDestMatrix = new Matrix();
+
         Rect stickerRect = new Rect();
         stickerView.getDrawingRect(stickerRect);
+        stickerSourceMatrix.getValues(valueSticker);
 
-        float value[] = new float[9];
-        float mPoints[] = new float[100];
-        stickerMatrix.getValues(value);
-
-        stickerMatrix.mapPoints(mPoints);
-
-        Log.i("stiker1", stickerMatrix.toString());
-        float scaleX = ((float)imgRect.width() / (float)stickerRect.width());
-        float scaleY = ((float)imgRect.height() / (float)stickerRect.height());
-        float transX,deltaX;
-        float transY,deltaY;
-
-
+        //get image display scaling
+        float scaleX = ((float)sourceImage.getWidth() / (float)stickerRect.width());
+        float scaleY = ((float) sourceImage.getHeight() / (float)stickerRect.height());
         float scale;
         if(scaleX>scaleY)
-        {
             scale = scaleX;
-        }
         else
-        {
             scale = scaleY;
-        }
 
-        Matrix testMat = imageView.getImageMatrix();
-        Log.i("testMat", testMat.toString());
+        imageMatrix.getValues(valueImage);
+        stickerDestMatrix.getValues(valueDestination);
 
-      /*  deltaY = (float)stickerRect.height() - ((float)stickerRect.height()*( value[stickerMatrix.MTRANS_Y]/(float)stickerRect.height()));
-        // deltaY =  ((float)stickerRect.height()* scaleY/scale) * -1f;
-       // deltaY = ((float)stickerRect.height() - value[stickerMatrix.MTRANS_Y]) * scaleY;
-        transY = (scaleY*value[stickerMatrix.MTRANS_Y]) - deltaY+ (((float)sticker.getHeight()/2)*(scale-1));
-       // transY = 0f;
-       // deltaY = -766.5f;
-        transX = ((scaleX*value[stickerMatrix.MTRANS_X]) - value[stickerMatrix.MTRANS_X]) +  (((float)sticker.getWidth()/2)*(scale-1));
-       // transY = ((scaleY*value[stickerMatrix.MTRANS_Y]) - (value[stickerMatrix.MTRANS_Y] - deltaY)) - deltaY+ (((float)sticker.getHeight()/2)*(scale-1));
-        //transY = -383.25f;
-     //   transY = ((scaleY*value[stickerMatrix.MTRANS_Y])*(scaleY/scale)) - (value[stickerMatrix.MTRANS_Y]) + (((float)sticker.getHeight()/2)*(scale-1));
-       // transY = 0+ (((float)sticker.getHeight()/2)*(scale-1));
-        //height sticker = 144
-       // transY = ((float)stickerRect.height() - ((float)imgRect.height()))/2;
-       // transY = transY * (-1);
-       // transY = transY - (298.5f + ((float)sticker.getHeight()/2));
-      //  transY = 468f + ((float)sticker.getHeight()/2);
-       // transY = transY * -1f;
-//        Log.i("heightSticker",Float.toString(sticker.getHeight()));
-        Log.i("dY",Float.toString(deltaY));
-        Log.i("scY", Float.toString(scaleY));
-        Log.i("scX", Float.toString(scaleX));
-        Log.i("Y",Float.toString(transY));
-        Log.i("X",Float.toString(transX));
-        stickerMatrix.postTranslate(transX, transY);
-       // stickerMatrix.preTranslate(transX,transY);
-       //stickerMatrix.setTranslate(transX,transY);
-        stickerMatrix.getValues(value);
-        Log.i("stikerTR", stickerMatrix.toString());
+        // calculate real scale
+        float scalex = valueSticker[Matrix.MSCALE_X];
+        float skewy = valueSticker[Matrix.MSKEW_Y];
+        float rScale = (float) Math.sqrt(scalex * scalex + skewy * skewy);
+//     get rotation degree
+        float rAngle = stickerView.totalDegree;
+        //Rotate First
+        stickerDestMatrix.postRotate(rAngle);
+        //Scale the image
+        stickerDestMatrix.postScale(rScale / valueImage[0], rScale / valueImage[4]);
+        //get values after scale
+        stickerDestMatrix.getValues(valueDestination);
+        //translate to location
+        stickerDestMatrix.postTranslate(valueSticker[2] * scale, (valueSticker[5] - valueImage[5]) * scale);
 
-        Log.i("scale", Float.toString(scale));
-       // value[2] = value[2] + ((float)sticker.getWidth()/2);
-       // value[5] = value[5] + ((float)sticker.getHeight()/2);
-       // float scale = value[stickerMatrix.MSCALE_Y] *(imgRect.height() / stickerRect.height());
-      //  stickerMatrix.postScale(scaleX,scaleY);
-      //  stickerMatrix.postTranslate(540f,766.5f);
-       // stickerMatrix.pos
-        float centerPointStickerX = value[2]+(((float)sticker.getWidth()*value[0])/2);
-        float centerPointStickerY = value[5]+(((float)sticker.getHeight()*value[4])/2);
+        canvas.drawBitmap(sourceImage, overlayMatrix, null);
+        canvas.drawBitmap(sticker, stickerDestMatrix, null);
 
-        stickerMatrix.postScale(scale, scale, centerPointStickerX,centerPointStickerY);
-        stickerMatrix.getValues(value);
-       // Matrix newSticker = new Matrix();
-//        newSticker.postRotate()
-        */
-       // stickerMatrix.postConcat(testMat);
-        //testMat.postConcat(stickerMatrix);
-       // testMat.postConcat()
-        float val1[] = new float[10];
-        float val2[] = new float[10];
-        testMat.getValues(val1);
-
-        Matrix mat = new Matrix();
-
-
-        float rAngle = Math.round(Math.atan2(value[Matrix.MSKEW_X], value[Matrix.MSKEW_X]) * (180 / Math.PI));
-        Log.i("angle",Float.toString(rAngle));
-        Log.i("stiker2", mat.toString());
-       // mat.postRotate(rAngle, (float)sticker.getWidth()/2f,(float)sticker.getHeight()/2f);
-        mat.postScale(value[0] / val1[0], value[4] / val1[4]);
-      //  stickerMatrix.postScale(value[0] / val1[0], value[4] / val1[4]);
-        mat.getValues(val2);
-        Log.i("stiker2", mat.toString());
-        mat.postTranslate(value[2] * scale, (value[5] - val1[5]) * scale);
-        stickerMatrix.getValues(value);
-        Log.i("stiker2", mat.toString());
-
-        Log.i("stiker2", mat.toString());
-    //    mat.postRotate(rAngle,(float)sticker.getWidth(),(float)sticker.getHeight());
-      //  stickerMatrix.postScale(value[0]/val1[0],value[4]/val1[4],value[2],value[5]/2);
-      //  stickerMatrix.postScale()
-        canvas.drawBitmap(img, myMatrix, null);
-        canvas.drawBitmap(sticker, mat, null);
-        Log.i("StickerRect", stickerRect.toString());
-        Log.i("imgRect",imgRect.toString());
-        Log.i("stiker2",stickerMatrix.toString());
         //Bitmap bmp = Bitmap.createScaledBitmap(sticker,)
        // MediaStore.Images.Media.insertImage(getContentResolver(), bmp, "test", "test");
      //   MediaStore.Images.Media.insertImage(getContentResolver(), bmOverlay, "test", "test");
        // stickerView.removeBorder();
-        imageView.setImageBitmap(bmOverlay);
-      //  ((ViewGroup)imageView.getParent()).removeView(stickerView);
+
+        //set new combined image to bitmap
+        imageView.setImageBitmap(bitmapOverlay);
+
+        //remove sticker from view and dealloc
+        ((ViewGroup)imageView.getParent()).removeView(stickerView);
+        stickerView.destroyDrawingCache();
+        stickerView = null;
+        sticker = null;
      //   canvas.drawBitmap(bmp2, 0, 0, null);
 
     }
