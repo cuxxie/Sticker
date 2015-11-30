@@ -207,15 +207,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         float rAngle = Math.round(Math.atan2(value[Matrix.MSKEW_X], value[Matrix.MSKEW_X]) * (180 / Math.PI));
-
-
-
+        Log.i("angle",Float.toString(rAngle));
+        Log.i("stiker2", mat.toString());
+       // mat.postRotate(rAngle, (float)sticker.getWidth()/2f,(float)sticker.getHeight()/2f);
         mat.postScale(value[0] / val1[0], value[4] / val1[4]);
       //  stickerMatrix.postScale(value[0] / val1[0], value[4] / val1[4]);
         mat.getValues(val2);
         Log.i("stiker2", mat.toString());
-        mat.postTranslate(value[2]*val2[0],(value[5] - val1[5]) * val2[4]);
+        mat.postTranslate(value[2] * scale, (value[5] - val1[5]) * scale);
         stickerMatrix.getValues(value);
+        Log.i("stiker2", mat.toString());
+
         Log.i("stiker2", mat.toString());
     //    mat.postRotate(rAngle,(float)sticker.getWidth(),(float)sticker.getHeight());
       //  stickerMatrix.postScale(value[0]/val1[0],value[4]/val1[4],value[2],value[5]/2);
