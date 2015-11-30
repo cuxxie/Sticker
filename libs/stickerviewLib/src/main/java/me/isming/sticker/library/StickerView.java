@@ -346,6 +346,7 @@ public class StickerView extends View {
                 if (mInController) {
 
                     mMatrix.postRotate(rotation(event), mPoints[8], mPoints[9]);
+                    Log.i("rotate",mMatrix.toString());
                     float nowLenght = caculateLength(mPoints[0], mPoints[1]);
                     float touchLenght = caculateLength(event.getX(), event.getY());
                     if (FloatMath.sqrt((nowLenght - touchLenght) * (nowLenght - touchLenght)) > 0.0f) {

@@ -2,4 +2,9 @@
     <string name="app_name">ImageSticker</string>
     <string name="action_done">Done</string>
     <string name="action_setting">Setting</string>
+    <string name="action_sticker">Sticker</string>
+    <string name="action_camera">Camera</string>
+    <string name="action_barcode">Barcode</string>
+    <string name="title_activity_scanner">ScannerActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>
